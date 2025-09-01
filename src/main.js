@@ -14,3 +14,8 @@
       <p>Текст</p>
   </li>
 */
+import './js/local-storage-api';
+import './js/markup-tasks';
+import './js/refs';
+import './js/render-tasks';
+import './js/theme-switcher';
