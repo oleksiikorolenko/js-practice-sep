@@ -1,5 +1,11 @@
 import { form, tasksList} from "./refs";
+import renderTask from "./tasks";
+import { saveTaskToLocalStorage, deleteTaskFromLocalStorage, renderTaskFromLocalStorage } from "./local-storage-api";
+import { initTheme } from "./theme-switcher";
 
+
+initTheme();
+renderTaskFromLocalStorage();
 
 const handleSubmit = (e) => {
     e.preventDefault();
@@ -10,19 +16,20 @@ const handleSubmit = (e) => {
         alert('Please write task name and description');
         return;
     }
+    
+    renderTask({ title: titleValue, description: descrValue });
+    saveTaskToLocalStorage({ title: titleValue, description: descrValue });
     form.reset();
-    renderTask({title: titleValue, description: descrValue});
 };
 
 form.addEventListener('submit', handleSubmit);
 
+tasksList.addEventListener('click', (e) => {
+    if (e.target.classList.contains('task-list-item-btn')) {
+        const taskItem = e.target.closest('.task-list-item');
+        const indexEl = [...tasksList.children].indexOf(taskItem);
+        deleteTaskFromLocalStorage(indexEl);
+        taskItem.remove();
+    }
+});
 
-function renderTask({title, description}) {
-    const markup = `<li class="task-list-item">
-      <button class="task-list-item-btn">Delete</button>
-      <h3>${title}</h3>
-      <p>${description}</p>
-  </li>`;
-    
-    tasksList.innerHTML = markup;
-}
